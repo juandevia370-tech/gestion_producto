@@ -1,20 +1,30 @@
+<?php
+
+require_once __DIR__ . '/../../config/database.php';
+
+$sql = "SELECT * FROM producto";
+
+$consulta = $conexion->prepare($sql);
+$consulta->execute();
+
+$productos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
+
     <title>Gestión de Productos</title>
+
 </head>
 
 <body>
 
     <h1>Gestión de Productos</h1>
-
-    <a href="index.php?accion=crear">
-        <button>Nuevo Producto</button>
-    </a>
-
-    <br><br>
 
     <table border="1">
 
@@ -23,7 +33,6 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Categoria</th>
-            <th>Acciones</th>
         </tr>
 
         <?php foreach ($productos as $producto): ?>
@@ -39,15 +48,11 @@
                 </td>
 
                 <td>
-                    $<?php echo $producto['precio']; ?>
+                    <?php echo $producto['precio']; ?>
                 </td>
 
                 <td>
                     <?php echo $producto['categoria']; ?>
-                </td>
-
-                <td>
-
                 </td>
 
             </tr>
