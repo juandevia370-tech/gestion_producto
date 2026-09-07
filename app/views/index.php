@@ -2,10 +2,6 @@
 
 require_once __DIR__ . '/../../config/database.php';
 
-/* =========================
-   LISTAR PRODUCTOS
-========================= */
-
 $sql = "SELECT * FROM producto";
 
 $consulta = $conexion->prepare($sql);
@@ -14,9 +10,6 @@ $consulta->execute();
 $productos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
 
-/* =========================
-   LISTAR CLIENTES
-========================= */
 
 $sqlClientes = "SELECT * FROM clientes";
 
@@ -33,6 +26,19 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
 <head>
 
     <meta charset="UTF-8">
+
+    <?php
+
+    $sqlProveedores = "SELECT * FROM proveedores";
+
+    $consultaProveedores = $conexion->prepare($sqlProveedores);
+    $consultaProveedores->execute();
+
+    $proveedores = $consultaProveedores->fetchAll(PDO::FETCH_ASSOC);
+
+    ?>
+
+
 
     <title>Gestión de Productos y Clientes</title>
 
@@ -128,6 +134,41 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
 
     </table>
 
-</body>
+    <title>Proveedores</title>
+
+    </head>
+
+    <body>
+        <h1>Listado de Proveedores</h1>
+
+        <table border="1" cellpadding="10">
+
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>NIT</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+            </tr>
+
+            <?php foreach ($proveedores as $proveedor): ?>
+
+                <tr>
+                    <td><?= htmlspecialchars($proveedor['id']) ?></td>
+
+                    <td><?= htmlspecialchars($proveedor['nombre']) ?></td>
+
+                    <td><?= htmlspecialchars($proveedor['nit']) ?></td>
+
+                    <td><?= htmlspecialchars($proveedor['correo']) ?></td>
+
+                    <td><?= htmlspecialchars($proveedor['telefono']) ?></td>
+                </tr>
+
+            <?php endforeach; ?>
+
+        </table>
+
+    </body>
 
 </html>
