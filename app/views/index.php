@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../config/database.php';
 
-$sql = "SELECT * FROM producto LIMIT 1";
+$sql = "SELECT * FROM producto ";
 
 $consulta = $conexion->prepare($sql);
 $consulta->execute();
@@ -30,12 +30,13 @@ $sql = "SELECT
             producto.id,
             producto.nombre,
             producto.precio,
-            producto.categoria,
+            categoria.nombre AS categoria,
             proveedores.nombre AS proveedor
         FROM producto
+        LEFT JOIN categoria
+            ON producto.categoria_id = categoria.id
         LEFT JOIN proveedores
-        ON producto.proveedor_id = proveedores.id
-        LIMIT 1";
+            ON producto.proveedor_id = proveedores.id";
 
 $consulta = $conexion->prepare($sql);
 $consulta->execute();
@@ -49,8 +50,6 @@ $productos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 <head>
 
     <meta charset="UTF-8">
-
-
 
 
     <title>Gestión de Productos y Clientes</title>
