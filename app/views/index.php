@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../config/database.php';
 
-$sql = "SELECT * FROM producto";
+$sql = "SELECT * FROM producto LIMIT 1";
 
 $consulta = $conexion->prepare($sql);
 $consulta->execute();
@@ -18,6 +18,29 @@ $consultaClientes->execute();
 
 $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
 
+
+$sqlProveedores = "SELECT * FROM proveedores";
+
+$consultaProveedores = $conexion->prepare($sqlProveedores);
+$consultaProveedores->execute();
+
+$proveedores = $consultaProveedores->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = "SELECT 
+            producto.id,
+            producto.nombre,
+            producto.precio,
+            producto.categoria,
+            proveedores.nombre AS proveedor
+        FROM producto
+        LEFT JOIN proveedores
+        ON producto.proveedor_id = proveedores.id
+        LIMIT 1";
+
+$consulta = $conexion->prepare($sql);
+$consulta->execute();
+
+$productos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -27,16 +50,6 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
 
     <meta charset="UTF-8">
 
-    <?php
-
-    $sqlProveedores = "SELECT * FROM proveedores";
-
-    $consultaProveedores = $conexion->prepare($sqlProveedores);
-    $consultaProveedores->execute();
-
-    $proveedores = $consultaProveedores->fetchAll(PDO::FETCH_ASSOC);
-
-    ?>
 
 
 
@@ -56,6 +69,7 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
             <th>Nombre</th>
             <th>Precio</th>
             <th>Categoría</th>
+            <th>Proveedor</th>
         </tr>
 
         <?php foreach ($productos as $producto): ?>
@@ -77,6 +91,9 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
                 <td>
                     <?= htmlspecialchars($producto['categoria']) ?>
                 </td>
+                <td>
+                    <?= htmlspecialchars($producto['proveedor']) ?>
+                </td>
 
             </tr>
 
@@ -86,11 +103,6 @@ $clientes = $consultaClientes->fetchAll(PDO::FETCH_ASSOC);
 
 
     <br><br>
-
-
-    <!-- =========================
-         CLIENTES
-    ========================= -->
 
     <h1>Listado de Clientes</h1>
 
